@@ -1,8 +1,6 @@
 const PI = 3.1415926535;
 
-var phase = 0;
-var phase_2 = 0;
-var phase_3 = 0;
+var phase_1 = 0;
 
 const vibrato_rate = 0.00;
 
@@ -11,41 +9,91 @@ var bufferSource = audioContext.createBufferSource();
 var scriptProcessor = audioContext.createScriptProcessor(4096, 0, 1);
 scriptProcessor.onaudioprocess = function(audioProcessingEvent)
 {
-  getBuffer(audioProcessingEvent.outputBuffer);
+  getBuffer(audioProcessingEvent.outputBuffer, scriptProcessor.wave);
 }
 
-function getBuffer(outputBuffer)
+function getBuffer(outputBuffer, wave)
 {
 
-  var delta = 440.0 * 2 * PI / outputBuffer.sampleRate;
+  var delta_1 = 440.0 * 2 * PI / outputBuffer.sampleRate;
   var outputData = outputBuffer.getChannelData(0);
 
-  var delta_2 = 550 * 2 * PI / outputBuffer.sampleRate;
+  if (wave == "triangle"){
+    for (var i = 0; i < outputBuffer.length; i++)
+      {
+        tone_1 = (Math.acos(Math.cos(phase_1)) -3.5);
 
-  var delta_3 = 660 * 2 * PI / outputBuffer.sampleRate;
+        phase_1 += delta_1; 
 
-for (var i = 0; i < outputBuffer.length; i++)
-  {
-    tone_1 = Math.cos(phase);
-    /*tone_2 = Math.cos(phase_2);*/
-    /*tone_3 = Math.cos(phase_3);*/
+        outputData[i] = 0.2 * tone_1;
 
-    /* phase += delta + Math.cos(phase_2) * vibrato_rate; */
-    phase += delta;
-    /*phase_2 += delta_2;*/
-    /*phase_3 += delta_3;*/
+      }
+    }
 
-    outputData[i] = 0.2 * tone_1;
+  if (wave == "white noise"){
+    for (var i = 0; i < outputBuffer.length; i++)
+      {
+        tone_1 = Math.random();
+  
+        phase_1 += delta_1; 
+  
+        outputData[i] = 0.2 * tone_1;
+  
+      }
+    }
 
-  }
+  if (wave == "sine"){
+    for (var i = 0; i < outputBuffer.length; i++)
+      {
+        tone_1 = Math.cos(phase_1)
+  
+        phase_1 += delta_1; 
+  
+        outputData[i] = 0.2 * tone_1;
+  
+      }
+    }
+
+    if (wave == "square"){
+      for (var i = 0; i < outputBuffer.length; i++)
+        {
+          tone_1 = (Math.ceil(Math.cos(phase_1)) -0.5);
+  
+          phase_1 += delta_1; 
+  
+          outputData[i] = 0.2 * tone_1;
+  
+        }
+      }
+    
+  
 }
 
-function onUserWantsToStart()
+function playTriangle()
 {
-  bufferSource.connect(scriptProcessor);
+  scriptProcessor.wave = "triangle";
+  bufferSource.connect(scriptProcessor);  
   scriptProcessor.connect(audioContext.destination);
   bufferSource.start();
 }
 
+function playSine(){
+  scriptProcessor.wave = "sine";
+  bufferSource.connect(scriptProcessor);  
+  scriptProcessor.connect(audioContext.destination);
+  bufferSource.start();
+}
 
-onUserWantsToStart();
+function playSquare(){
+  scriptProcessor.wave = "square";
+  bufferSource.connect(scriptProcessor);  
+  scriptProcessor.connect(audioContext.destination);
+  bufferSource.start();
+}
+
+function playWhiteNoise(){
+  scriptProcessor.wave = "white noise";
+  bufferSource.connect(scriptProcessor);  
+  scriptProcessor.connect(audioContext.destination);
+  bufferSource.start();
+}
