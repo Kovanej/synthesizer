@@ -3,9 +3,59 @@
 <script type="text/javascript" src="js/play.js"></script>
 </head>
 <body>
-<h1><a href='JavaScript:playSine();'>SINE</a></h1>
-<h1><a href='JavaScript:playTriangle();'>TRIANGLE</a></h1>
-<h1><a href='JavaScript:playSquare();'>SQUARE</a></h1>
-<h1><a href='JavaScript:playWhiteNoise();'>WHITE NOISE</a></h1>
+
+    <form>
+       <p>Please select the wave:</p>
+       <input type="radio" id="sine" name="wave" value="sine">
+       <label for="sine">sine</label><br>
+       <input type="radio" id="square" name="wave" value="square">
+       <label for="square">square</label><br>
+       <input type="radio" id="triangle" name="wave" value="triangle">
+       <label for="triangle">triangle</label>      
+    </form>
+
+<script>
+
+window.addEventListener('keydown', function(e) {
+        console.log(e);
+        console.log(e.keyCode);        
+        // const key = document.querySelector(`.key[data-key="${e.keyCode}"]`); later for css funzies 
+        // if (!audio){return};
+        // audio.currentTime = 0;
+        // audio.play();
+
+        // TODO wave should be set up by user
+
+        if (document.getElementById('sine').checked) {
+            wave = "sine"
+        } else if (document.getElementById('square').checked) {
+            wave = "square"
+        } else if (document.getElementById('triangle').checked) {
+            wave = "triangle"
+        }
+
+        console.log(wave)
+
+        // wave = "sine"
+        play(wave = wave, note = e.keyCode);
+        // console.log(key);
+    }
+);
+
+window.addEventListener('keyup', function(e) {
+        // console.log(e);
+        // console.log(e.keyCode);        
+        
+        // TODO wave should be set up by user
+
+        wave = "sine"
+       
+        stop(wave = wave, keycode = e.keyCode);
+        
+    }
+);
+
+</script>
+
 </body>
 </html>
